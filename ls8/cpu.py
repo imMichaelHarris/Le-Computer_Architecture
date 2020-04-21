@@ -18,19 +18,28 @@ class CPU:
 
         # For now, we've just hardcoded a program:
 
-        program = [
-            # From print8.ls8
-            0b10000010, # LDI R0,8
-            0b00000000,
-            0b00001000,
-            0b01000111, # PRN R0
-            0b00000000,
-            0b00000001, # HLT
-        ]
-
-        for instruction in program:
-            self.ram[address] = instruction
-            address += 1
+        # program = [
+        #     # From print8.ls8
+        #     0b10000010, # LDI R0,8
+        #     0b00000000,
+        #     0b00001000,
+        #     0b01000111, # PRN R0
+        #     0b00000000,
+        #     0b00000001, # HLT
+        # ]
+        with open(sys.argv[1]) as f:
+            for line in f:
+                comment_split = line.strip().split("#")
+                num = comment_split[0]
+                if num == "":
+                    continue
+                x = int(num, 2)
+                # print(f"{x:08b}: {x:d}")
+                self.ram[address] = x
+                address += 1
+        # for instruction in program:
+        #     self.ram[address] = instruction
+        #     address += 1
     def ram_read(self, MAR):
         return self.ram[MAR]
 
@@ -43,6 +52,8 @@ class CPU:
         if op == "ADD":
             self.reg[reg_a] += self.reg[reg_b]
         #elif op == "SUB": etc
+        elif op == "MUL":
+            self.reg[reg_a] *= self.reg[reg_b]
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -73,6 +84,9 @@ class CPU:
         LDI = 0b10000010
         PRN = 0b01000111
         HALT = 0b00000001
+        ADD = 0b10101000
+        MUL = 0b10100010
+
 
         while running:
             instruction = self.ram_read(self.pc)
@@ -80,7 +94,6 @@ class CPU:
             operand_b = self.ram_read(self.pc + 2)
 
             if instruction == LDI:
-                print(f"LDI {operand_a}, {operand_b}")
                 self.reg[operand_a] = operand_b
                 self.pc += 3
             elif instruction == PRN:
@@ -88,3 +101,11 @@ class CPU:
                 self.pc += 2
             elif instruction == HALT:
                 running = False
+            elif instruction == ADD:
+                self.alu("ADD", operand_a, operand_b)
+                self.pc += 2
+            elif instruction == MUL:
+                self.alu("MUL", operand_a, operand_b)
+                self.pc += 3
+            else:
+                print("Nothing")
