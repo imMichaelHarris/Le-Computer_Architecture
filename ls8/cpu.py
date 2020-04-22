@@ -10,6 +10,7 @@ class CPU:
         self.pc = 0
         self.ram = [0] * 255
         self.reg = [0] * 8
+        self.sp = 7
 
     def load(self):
         """Load a program into memory."""
