@@ -108,5 +108,11 @@ class CPU:
             elif instruction == MUL:
                 self.alu("MUL", operand_a, operand_b)
                 self.pc += 3
+            elif instruction == PUSH:
+                self.sp -= 1
+                value = self.reg[operand_a]
+                self.ram_write(self.sp, value)
+                self.pc += 2
+
             else:
                 print("Nothing")
