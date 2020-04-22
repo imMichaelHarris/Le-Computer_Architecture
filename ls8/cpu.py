@@ -113,6 +113,10 @@ class CPU:
                 value = self.reg[operand_a]
                 self.ram_write(self.sp, value)
                 self.pc += 2
-
+            elif instruction == POP:
+                value = self.ram_read(self.sp)
+                self.reg[operand_a] = value
+                self.sp += 1
+                self.pc += 2
             else:
                 print("Nothing")
