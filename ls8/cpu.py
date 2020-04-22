@@ -94,30 +94,31 @@ class CPU:
             instruction = self.ram_read(self.pc)
             operand_a = self.ram_read(self.pc + 1)
             operand_b = self.ram_read(self.pc + 2)
-
+            increment = (instruction >> 6) + 1
+            print("Increment",increment)
             if instruction == LDI:
                 self.reg[operand_a] = operand_b
-                self.pc += 3
+                self.pc += increment
             elif instruction == PRN:
                 print(self.reg[operand_a])
-                self.pc += 2
+                self.pc += increment
             elif instruction == HALT:
                 running = False
             elif instruction == ADD:
                 self.alu("ADD", operand_a, operand_b)
-                self.pc += 2
+                self.pc += increment
             elif instruction == MUL:
                 self.alu("MUL", operand_a, operand_b)
-                self.pc += 3
+                self.pc += increment
             elif instruction == PUSH:
                 self.sp -= 1
                 value = self.reg[operand_a]
                 self.ram_write(self.sp, value)
-                self.pc += 2
+                self.pc += increment
             elif instruction == POP:
                 value = self.ram_read(self.sp)
                 self.reg[operand_a] = value
                 self.sp += 1
-                self.pc += 2
+                self.pc += increment
             else:
                 print("Nothing")
