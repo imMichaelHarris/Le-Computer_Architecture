@@ -86,7 +86,8 @@ class CPU:
         HALT = 0b00000001
         ADD = 0b10101000
         MUL = 0b10100010
-
+        PUSH = 0b01000101
+        POP = 0b01000110
 
         while running:
             instruction = self.ram_read(self.pc)
