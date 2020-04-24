@@ -59,6 +59,15 @@ class CPU:
         elif op == "MUL":
             print("mul")
             self.reg[reg_a] *= self.reg[reg_b]
+        elif op == "CMP":
+            if reg_a is reg_b:
+                self.flag = 0b00000001
+            elif reg_a < reg_b:
+                self.flag = 0b00000100
+            elif reg_a > reg_b:
+                self.flag = 0b00000010
+            else:
+                self.flag = 0b00000000
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -95,6 +104,8 @@ class CPU:
         POP = 0b01000110
         CALL = 0b01010000
         RET = 0b01010000
+        CMP = 0b10100111
+
 
 
         while running:
