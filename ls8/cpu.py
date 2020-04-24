@@ -105,7 +105,9 @@ class CPU:
         CALL = 0b01010000
         RET = 0b01010000
         CMP = 0b10100111
-
+        JEQ = 0b01010101
+        JMP = 0b01010100
+        JNE = 0b01010110
 
 
         while running:
@@ -150,5 +152,20 @@ class CPU:
             elif instruction == RET:
                 print("RET")
                 self.pc = self.ram[self.sp]
+            elif instruction == CMP:
+                self.alu("CMP", operand_a, operand_b)
+                self.pc += 3
+            elif instruction == JEQ:
+                if self.flag == (self.flag & 0b00000001):
+                    self.pc = self.reg[operand_a]
+                else:
+                    self.pc += 2
+            elif instruction == JNE:
+                if self.flag != 0b00000001:
+                    self.pc = self.reg[operand_a]
+                else:
+                    self.pc += 2
+            elif instruction == JMP:
+                self.pc = self.reg[operand_a]
             else:
                 print("Nothing")
