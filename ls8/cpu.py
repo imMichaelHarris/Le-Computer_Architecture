@@ -11,6 +11,8 @@ class CPU:
         self.ram = [0] * 255
         self.reg = [0] * 8
         self.sp = 7
+        self.flag = 0b11111111
+
 
     def load(self):
         """Load a program into memory."""
